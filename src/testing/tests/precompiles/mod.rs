@@ -5,6 +5,7 @@ mod keccak256;
 mod ecrecover;
 mod ecadd;
 mod ecmul;
+mod ecpairing;
 mod modexp;
 
 fn pretty_print_memory_dump(content: &Vec<[u8; 32]>, range: std::ops::Range<u32>) {
