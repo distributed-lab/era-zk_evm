@@ -3,6 +3,7 @@ use super::*;
 mod keccak256;
 // mod sha256;
 mod ecrecover;
+mod ecadd;
 
 fn pretty_print_memory_dump(content: &Vec<[u8; 32]>, range: std::ops::Range<u32>) {
     println!("Memory dump:");
