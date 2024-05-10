@@ -142,13 +142,13 @@ fn modexp_test_inner(
     if expect_ok {
         let mut buffer = [0u8; 32];
         U256::one().to_big_endian(&mut buffer);
-        //assert_eq!(ok_or_error_marker, buffer);
-        //assert_eq!(&output, &expected_result);
+        assert_eq!(ok_or_error_marker, buffer);
+        assert_eq!(&output, &expected_result);
     } else {
         let mut buffer = [0u8; 32];
         U256::zero().to_big_endian(&mut buffer);
-        //assert_eq!(ok_or_error_marker, buffer);
-        //assert_eq!(&output[..], &[0u8; 32]);
+        assert_eq!(ok_or_error_marker, buffer);
+        assert_eq!(&output[..], &[0u8; 32]);
     }
 
     (content, range)
