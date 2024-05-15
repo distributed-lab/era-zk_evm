@@ -139,11 +139,31 @@ fn ecmul_test_inner_from_raw(
     ecmul_test_inner(x1, y1, s, expect_ok, x, y)
 }
 
-#[test]
-fn test_valid() {
-    let raw_input = "1148f79e53544582d22e5071480ae679d0b9df89d69e881f611e8381384ed1ad0bac10178d2cd8aa9b4af903461b9f1666c219cdfeb2bb5e0cd7cd6486a32a6d15f0e77d431a6c4d21df6a71cdcb0b2eeba21fc1192bd9801b8cd8b7c763e115";
-    let raw_x = "15fac9de17d074fc56d9d679d5c011e90688d953b04edd1f82c469fc07a07648";
-    let raw_y = "13de0f379fa2120d2caed4e79c43d67104e091783118c4a04d0250a317183c26";
-    let (content, range) = ecmul_test_inner_from_raw(raw_input, raw_x, raw_y, true);
-    pretty_print_memory_dump(&content, range);
+#[cfg(test)]
+pub mod test {
+    /// Test for the ecmul precompile correctness. 
+    /// Given a valid scalar `k` and point `P`, verifies that `[k]P` is calculated correctly.
+    #[test]
+    fn test_valid() {
+        use super::*;
+
+        let raw_input = "1148f79e53544582d22e5071480ae679d0b9df89d69e881f611e8381384ed1ad0bac10178d2cd8aa9b4af903461b9f1666c219cdfeb2bb5e0cd7cd6486a32a6d15f0e77d431a6c4d21df6a71cdcb0b2eeba21fc1192bd9801b8cd8b7c763e115";
+        let raw_x = "15fac9de17d074fc56d9d679d5c011e90688d953b04edd1f82c469fc07a07648";
+        let raw_y = "13de0f379fa2120d2caed4e79c43d67104e091783118c4a04d0250a317183c26";
+        let (content, range) = ecmul_test_inner_from_raw(raw_input, raw_x, raw_y, true);
+        pretty_print_memory_dump(&content, range);
+    }
+
+    /// Test that when provided with the wrong point `P`, the precompile returns an error.
+    #[test]
+    fn test_invalid() {
+        use super::*;
+
+        // We "twist" the point from `test_valid` by a couple of bytes to make it outside the curve.
+        let raw_input = "1148f79e5364458dd22f5071480ae679d0b9df89d69e881f611e8381384ed1ad0bac10178d2cd8aa9b4af903461b9f1666c219cdfeb2bb5e0cd7cd6486a32a6d15f0e77d431a6c4d21df6a71cdcb0b2eeba21fc1192bd9801b8cd8b7c763e115";
+        let raw_x = "0000000000000000000000000000000000000000000000000000000000000000";
+        let raw_y = "0000000000000000000000000000000000000000000000000000000000000000";
+        let (content, range) = ecmul_test_inner_from_raw(raw_input, raw_x, raw_y, false);
+        pretty_print_memory_dump(&content, range);
+    }
 }

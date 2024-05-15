@@ -152,11 +152,31 @@ fn ecadd_test_inner_from_raw(
     ecadd_test_inner(x1, y1, x2, y2, expect_ok, x, y)
 }
 
-#[test]
-fn test_valid() {
-    let raw_input = "099c07c9dd1107b9c9b0836da7ecfb7202d10bea1b8d1e88bc51ca476f23d91d28351e12f9219537fc8d6cac7c6444bd7980390d0d3e203fe0d8c1b0d811995021e177a985c3db8ef1d670629972c007ae90c78fb16e3011de1d08f5a44cb6550bd68a7caa07f6adbecbf06fb1f09d32b7bed1369a2a58058d1521bebd8272ac";
-    let raw_x = "25beba7ab903d641d77e5801ca4d69a7a581359959c5d2621301dddafb145044";
-    let raw_y = "19ee7a5ce8338bbcf4f74c3d3ec79d3635e837cb723ee6a0fa99269e3c6d7e23";
-    let (content, range) = ecadd_test_inner_from_raw(raw_input, raw_x, raw_y, true);
-    pretty_print_memory_dump(&content, range);
+#[cfg(test)]
+pub mod test {
+    /// Tests whether the operation `P+Q=R` holds correctly for the given `P`,`Q`,`R`.
+    #[test]
+    fn test_valid() {
+        use super::*;
+
+        let raw_input = "099c07c9dd1107b9c9b0836da7ecfb7202d10bea1b8d1e88bc51ca476f23d91d28351e12f9219537fc8d6cac7c6444bd7980390d0d3e203fe0d8c1b0d811995021e177a985c3db8ef1d670629972c007ae90c78fb16e3011de1d08f5a44cb6550bd68a7caa07f6adbecbf06fb1f09d32b7bed1369a2a58058d1521bebd8272ac";
+        let raw_x = "25beba7ab903d641d77e5801ca4d69a7a581359959c5d2621301dddafb145044";
+        let raw_y = "19ee7a5ce8338bbcf4f74c3d3ec79d3635e837cb723ee6a0fa99269e3c6d7e23";
+        let (content, range) = ecadd_test_inner_from_raw(raw_input, raw_x, raw_y, true);
+        pretty_print_memory_dump(&content, range);
+    }
+
+    /// Tests whether the operation `P+Q=R` fails if either of P or Q is incorrect.
+    #[test]
+    fn test_invalid() {
+        use super::*;
+
+        // We "twist" one of the points from `test_valid` by a couple of bytes
+        let raw_input = "099c08c9dd1107b9c9b0836da7ecfb7202d10bea1b8d1e88cc51ca476f23d91d28351e12f9219537fc8d6cac7c6444bd7980390d0d3e203fe0d8c1b0d811995021e177a985c3db8ef1d670629972c007ae90c78fb16e3011de1d08f5a44cb6550bd68a7caa07f6adbecbf06fb1f09d32b7bed1369a2a58058d1521bebd8272ac";
+        let raw_x = "0000000000000000000000000000000000000000000000000000000000000000";
+        let raw_y = "0000000000000000000000000000000000000000000000000000000000000000";
+        let (content, range) = ecadd_test_inner_from_raw(raw_input, raw_x, raw_y, false);
+        pretty_print_memory_dump(&content, range);
+    }
 }
+
