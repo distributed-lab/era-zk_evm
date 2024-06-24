@@ -15,8 +15,8 @@ static_assertions = "1"
 
 # TODO: change to use matter-labs when everything is merged:
 # zk_evm_abstractions = { git = "https://github.com/matter-labs/era-zk_evm_abstractions.git", branch = "dl-precompiles" }
-# zk_evm_abstractions = { git = "https://github.com/distributed-lab/era-zk_evm_abstractions.git", branch = "dl-precompiles" }
-zk_evm_abstractions = { path = "../era-zk_evm_abstractions" }
+zk_evm_abstractions = { git = "https://github.com/distributed-lab/era-zk_evm_abstractions.git", branch = "feature/ec-and-modexp-precompiles" }
+# zk_evm_abstractions = { path = "../era-zk_evm_abstractions" }
 
 lazy_static = "1.4"
 
